@@ -7,8 +7,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 def get_top_user_for_date(
-    con: duckdb.DuckDBPyConnection, 
-    file_path: str, 
+    con: duckdb.DuckDBPyConnection,
+    file_path: str,
     tweet_date: date
 ) -> Tuple[Optional[str], int]:
     """Gets the user with the highest tweet count for a specific date."""

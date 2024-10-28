@@ -16,7 +16,7 @@ def q1_time(file_path: str, num_threads: int = 4) -> List[Tuple[date, str]]:
 
         query = f"""
         WITH TopDates AS (
-            SELECT 
+            SELECT
                 date_trunc('day', date) AS tweet_date,
                 COUNT(*) AS tweet_count
             FROM read_parquet('{file_path}')
@@ -25,7 +25,7 @@ def q1_time(file_path: str, num_threads: int = 4) -> List[Tuple[date, str]]:
             LIMIT 10
         ),
         RankedUsers AS (
-            SELECT 
+            SELECT
                 date_trunc('day', date) AS tweet_date,
                 username,
                 COUNT(*) AS tweet_count,
