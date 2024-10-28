@@ -232,4 +232,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Files
+farmers-protest-tweets-2021-2-4.json
+tweets.parquet
+
 # End of https://www.toptal.com/developers/gitignore/api/python,windows,macos
