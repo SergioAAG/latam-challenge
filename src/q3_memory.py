@@ -34,17 +34,17 @@ def q3_memory(file_path: str) -> List[Tuple[str, int]]:
     """Returns top 10 most mentioned users using memory-optimized processing."""
     try:
         logger.info(f"Starting processing for file: {file_path}")
-        
+
         with duckdb.connect(database=':memory:') as con:            
             get_flattened_mentions(con, file_path)
             results = get_mention_counts(con)
-            
+
             mention_counts = Counter({username: count for username, count in results})
             top_mentions = mention_counts.most_common(10)
-            
+
             logger.info("Processing completed successfully")
             return top_mentions
-    
+
     except FileNotFoundError:
         logger.error(f"File not found: {file_path}")
         raise

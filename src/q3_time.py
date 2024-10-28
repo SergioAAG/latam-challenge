@@ -25,7 +25,7 @@ def q3_time(file_path: str) -> List[Tuple[str, int]]:
             ORDER BY mention_count DESC, username ASC
             LIMIT 10;
             """
-            
+
             results = con.execute(query, [file_path]).fetchall()
 
         logger.info("Processing completed successfully")
