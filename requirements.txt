@@ -2,3 +2,4 @@ pyarrow==17.0.0
 duckdb==1.1.2
 pandas==2.2.3
 jsonlines==4.0.0
+emoji==2.14.0
