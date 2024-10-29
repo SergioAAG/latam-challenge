@@ -57,7 +57,7 @@ def q1_memory_json(file_path: str) -> List[Tuple[datetime.date, str]]:
             """).fetchone()
             results.append((tweet_date, top_user[0]))
 
-    except duckdb.BinderException as e:
+    except duckdb.BinderException:
 
         con.close()
         return []
