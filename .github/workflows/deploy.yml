@@ -1,0 +1,69 @@
+name: Deploy Latam Challenge
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+env:
+  SERVICE_NAME: latam-challenge
+  REGION: us-east1
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # - name: Authenticate with Google Cloud
+      #   uses: google-github-actions/auth@v1
+      #   with:
+      #     credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Set Deployment Variables
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "Simulating setting project ID for production environment."
+            echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_PROD }}" >> $GITHUB_ENV
+            echo "FULL_SERVICE_NAME=${{ env.SERVICE_NAME }}-prod" >> $GITHUB_ENV
+          else
+            echo "Simulating setting project ID for development environment."
+            echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_DEV }}" >> $GITHUB_ENV
+            echo "FULL_SERVICE_NAME=${{ env.SERVICE_NAME }}-dev" >> $GITHUB_ENV
+          fi
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          echo "Simulating Docker configuration for Google Artifact Registry authentication."
+          # gcloud auth configure-docker
+
+      - name: Build and Tag Docker Image
+        run: |
+          echo "Simulating Docker image build and tagging for deployment."
+          IMAGE_NAME="${{ env.REGION }}-docker.pkg.dev/${GCP_PROJECT_ID}/latam-challenge-repo/$FULL_SERVICE_NAME"
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+          # Actual commands (commented out for demonstration)
+          # docker build -t $IMAGE_NAME:${{ github.sha }} --build-arg GCP_PROJECT_ID=$GCP_PROJECT_ID .
+          # docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
+
+      - name: Push Docker Image to Artifact Registry
+        run: |
+          echo "Simulating push of Docker image to Google Artifact Registry."
+          # Actual commands (commented out for demonstration)
+          # docker push $IMAGE_NAME:${{ github.sha }}
+          # docker push $IMAGE_NAME:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          echo "Simulating deployment of Docker image to Google Cloud Run."
+          # gcloud run deploy $SERVICE_NAME \
+          #   --image $IMAGE_NAME:latest \
+          #   --region $REGION \
+          #   --platform managed \
+          #   --project $GCP_PROJECT_ID
+
+
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
