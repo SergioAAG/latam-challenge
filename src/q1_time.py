@@ -7,7 +7,33 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 def q1_time(file_path: str, num_threads: int = 4) -> List[Tuple[date, str]]:
-    """Gets top 10 dates with most tweets and the user with highest tweets for each date using a single query."""
+    """
+    Processes a Parquet file of tweets to identify the top 10 dates with the most tweets
+    and, for each date, the user with the highest number of tweets.
+
+    This function prioritizes execution time by processing the entire file in a single query.
+
+    Parameters
+    ----------
+    file_path : str
+        Path to the Parquet file.
+    num_threads : int, optional
+        Number of threads to use for parallel processing (default is 1).
+
+    Returns
+    -------
+    List[Tuple[date, str]]
+        A list of tuples containing:
+            - Date (date)
+            - Username (str) with the highest number of tweets on that date.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the specified file does not exist.
+    Exception
+        If an unexpected error occurs during processing.
+    """
     con = None
     try:
         logger.info(f"Starting processing for file: {file_path} with {num_threads} threads")
@@ -16,7 +42,7 @@ def q1_time(file_path: str, num_threads: int = 4) -> List[Tuple[date, str]]:
 
         query = f"""
         WITH TopDates AS (
-            SELECT
+            SELECT 
                 date_trunc('day', date) AS tweet_date,
                 COUNT(*) AS tweet_count
             FROM read_parquet('{file_path}')
@@ -25,7 +51,7 @@ def q1_time(file_path: str, num_threads: int = 4) -> List[Tuple[date, str]]:
             LIMIT 10
         ),
         RankedUsers AS (
-            SELECT
+            SELECT 
                 date_trunc('day', date) AS tweet_date,
                 username,
                 COUNT(*) AS tweet_count,

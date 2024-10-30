@@ -6,7 +6,31 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 def q3_time(file_path: str) -> List[Tuple[str, int]]:
-    """Returns top 10 most mentioned users using time-optimized single query processing."""
+    """
+    Processes a Parquet file to identify the top 10 most mentioned users,
+    prioritizing execution time by flattening and counting mentions in a single query.
+
+    Parameters
+    ----------
+    file_path : str
+        Path to the Parquet file.
+
+    Returns
+    -------
+    List[Tuple[str, int]]
+        A list of tuples containing:
+            - Username (str)
+            - Number of mentions (int)
+
+    Raises
+    ------
+    FileNotFoundError
+        If the specified file does not exist.
+    duckdb.BinderException
+        If there is an error in the Parquet file structure or SQL query.
+    Exception
+        If an unexpected error occurs during processing.
+    """
     try:
         logger.info(f"Starting processing for file: {file_path}")
 

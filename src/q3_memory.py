@@ -7,7 +7,21 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 def get_flattened_mentions(con: duckdb.DuckDBPyConnection, file_path: str) -> None:
-    """Creates a temporary view of flattened user mentions."""
+    """
+    Creates a temporary view of flattened mentions from the Parquet file.
+
+    Parameters
+    ----------
+    con : duckdb.DuckDBPyConnection
+        Active DuckDB connection.
+    file_path : str
+        Path to the Parquet file.
+
+    Raises
+    ------
+    Exception
+        If an unexpected error occurs during view creation.
+    """
     query = f"""
     CREATE TEMP VIEW flattened_mentions AS
     SELECT 
@@ -18,7 +32,26 @@ def get_flattened_mentions(con: duckdb.DuckDBPyConnection, file_path: str) -> No
     con.execute(query)
 
 def get_mention_counts(con: duckdb.DuckDBPyConnection) -> List[Tuple[str, int]]:
-    """Gets top 10 users by mention count."""
+    """
+    Retrieves mention counts per user, ordered by the most mentioned users.
+
+    Parameters
+    ----------
+    con : duckdb.DuckDBPyConnection
+        Active DuckDB connection.
+
+    Returns
+    -------
+    List[Tuple[str, int]]
+        A list of tuples containing:
+            - Username (str)
+            - Number of mentions (int)
+
+    Raises
+    ------
+    Exception
+        If an unexpected error occurs during query execution.
+    """
     query = """
     SELECT 
         username,
@@ -31,7 +64,31 @@ def get_mention_counts(con: duckdb.DuckDBPyConnection) -> List[Tuple[str, int]]:
     return con.execute(query).fetchall()
 
 def q3_memory(file_path: str) -> List[Tuple[str, int]]:
-    """Returns top 10 most mentioned users using memory-optimized processing."""
+    """
+    Processes a Parquet file to identify the top 10 most mentioned users,
+    optimizing memory usage by using temporary views and modular queries.
+
+    Parameters
+    ----------
+    file_path : str
+        Path to the Parquet file.
+
+    Returns
+    -------
+    List[Tuple[str, int]]
+        A list of tuples containing:
+            - Username (str)
+            - Number of mentions (int)
+
+    Raises
+    ------
+    FileNotFoundError
+        If the specified file does not exist.
+    duckdb.BinderException
+        If there is an error in the Parquet file structure or SQL query.
+    Exception
+        If an unexpected error occurs during processing.
+    """
     try:
         logger.info(f"Starting processing for file: {file_path}")
 

@@ -6,7 +6,31 @@ empty_parquet_file_path = "tests/resources/empty_tweets.parquet"
 test_parquet_file_path = 'tests/resources/small_tweets.parquet'
 
 def test_q1_memory_basic_functionality():
-    """Test q1_memory to verify that it handles valid data and returns correct types."""    
+    """
+    Tests the basic functionality of q1_memory function by verifying correct data handling
+    and type validation of returned results.
+
+    Parameters
+    ----------
+    None
+        Uses global test_parquet_file_path for testing.
+
+    Returns
+    -------
+    None
+        Test passes if all assertions are successful.
+
+    Raises
+    ------
+    AssertionError
+        If any of the following conditions fail:
+        - Result is not a list
+        - Results items are not tuples
+        - Tuples don't contain exactly 2 elements
+        - First tuple element is not a datetime.date
+        - Second tuple element is not a string
+        - Results don't match expected output
+    """    
     results = q1_memory(test_parquet_file_path)
 
     assert isinstance(results, list), "Result must be a list"
@@ -20,6 +44,23 @@ def test_q1_memory_basic_functionality():
     assert results == expected_results, "Results do not match expected output"
 
 def test_q1_memory_empty_file():
-    """Test q1_memorywith an empty Parquet file."""
+    """
+    Tests q1_memory function behavior when processing an empty Parquet file.
+
+    Parameters
+    ----------
+    None
+        Uses global empty_parquet_file_path for testing.
+
+    Returns
+    -------
+    None
+        Test passes if assertion is successful.
+
+    Raises
+    ------
+    AssertionError
+        If the function doesn't return an empty list when processing an empty file.
+    """
     results = q1_memory(empty_parquet_file_path)
     assert len(results) == 0, "Empty file should return an empty list"
