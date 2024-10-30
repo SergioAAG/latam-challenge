@@ -3,3 +3,6 @@ duckdb==1.1.2
 pandas==2.2.3
 jsonlines==4.0.0
 emoji==2.14.0
+
+#Se deja comentando fastapi a modo de ejemplo para el caso de uso de la api
+#fastapi==0.115.4
