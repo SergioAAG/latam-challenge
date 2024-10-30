@@ -11,13 +11,37 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 def extract_emojis_from_content(content: str) -> List[str]:
-    """Extracts emojis from text content."""
+    """
+    Extracts emojis from a string of text.
+
+    Parameters
+    ----------
+    content : str
+        Tweet content to extract emojis from.
+
+    Returns
+    -------
+    List[str]
+        A list of emojis found in the content.
+    """
     if not isinstance(content, str):
         return []
     return [d['emoji'] for d in emoji.emoji_list(content)] if content else []
 
 def process_chunk(contents: List[str]) -> Counter:
-    """Process a chunk of tweets and count emojis."""
+    """
+    Processes a chunk of tweet contents and returns an emoji counter.
+
+    Parameters
+    ----------
+    contents : List[str]
+        List of tweet contents to process.
+
+    Returns
+    -------
+    Counter
+        A Counter object with the counts of each emoji.
+    """
     chunk_counter = Counter()
     for content in contents:
         if content:
@@ -25,8 +49,32 @@ def process_chunk(contents: List[str]) -> Counter:
     return chunk_counter
 
 def q2_time(file_path: str) -> List[Tuple[str, int]]:
-    """Returns top 10 most used emojis using parallel processing for speed optimization."""
-    logger.info(f"Starting processing for file: {file_path}")
+    """
+    Returns the top 10 most used emojis and their respective counts.
+    This version prioritizes execution speed by loading the entire file into memory.
+
+    Parameters
+    ----------
+    file_path : str
+        Path to the Parquet file.
+
+    Returns
+    -------
+    List[Tuple[str, int]]
+        A list of tuples containing:
+            - Emoji (str)
+            - Count (int)
+
+    Raises
+    ------
+    FileNotFoundError
+        If the specified file does not exist.
+    ValueError
+        If the file is empty or has incorrect formatting.
+    RuntimeError
+        For unexpected errors during processing.
+    """
+    logger.info(f"Starting time-optimized processing for file: {file_path}")
 
     if not isinstance(file_path, str):
         raise TypeError("File path must be a string")
